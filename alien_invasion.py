@@ -19,9 +19,7 @@ class AlienInvasion:
         self.settings = Settings()
 
         #create screen
-        self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-        self.settings.screen_width = self.screen.get_rect().width
-        self.settings.screen_height = self.screen.get_rect().height
+        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
 
         #Create an instance to store game statistics, and create a scoreboard.
@@ -39,7 +37,6 @@ class AlienInvasion:
 
     def run_game(self):
         #Start the main loop for the game
-        
         while True:
             self._check_events()
 
@@ -110,24 +107,6 @@ class AlienInvasion:
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
-    
-    def _update_screen(self):
-        #Update images on the screen, and flip to the new screen.
-        self.screen.fill(self.settings.bg_color)
-        self.ship.blitme()
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
-        self.aliens.draw(self.screen)
-
-        #Draw the score information.
-        self.sb.show_score()
-
-        #Draw the play button if the game is inactive.
-        if not self.stats.game_active:
-            self.play_button.draw_button()
-
-        #Make the most recently drawn screen visible
-        pygame.display.flip()
 
     def _update_bullets(self):
         #Update position of bullets and get rid of old bullets.
@@ -160,6 +139,24 @@ class AlienInvasion:
             #Increase levle
             self.stats.level += 1
             self.sb.prep_level()
+
+    def _update_screen(self):
+        #Update images on the screen, and flip to the new screen.
+        self.screen.fill(self.settings.bg_color)
+        self.ship.blitme()
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
+        self.aliens.draw(self.screen)
+
+        #Draw the score information.
+        self.sb.show_score()
+
+        #Draw the play button if the game is inactive.
+        if not self.stats.game_active:
+            self.play_button.draw_button()
+
+        #Make the most recently drawn screen visible
+        pygame.display.flip()
 
     def _create_fleet(self):
         #Create an alien and find teh number o f aliens in a row
